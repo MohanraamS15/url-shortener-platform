@@ -61,6 +61,21 @@ url-shortener-api/
     └── deleteInactiveURL.js
 ```
 
+## Frontend
+
+A simple static frontend is included in the `frontend/` folder with pages and assets:
+
+```
+frontend/
+├── index.html       # Public landing / shortener UI
+├── register.html    # User registration page
+├── dashboard.html   # Logged-in user's dashboard
+├── script.js        # Frontend JavaScript for auth and shortening
+└── style.css        # Basic styles
+```
+
+To use the frontend during development, serve the `frontend` folder statically (for example, add `app.use(express.static('frontend'))` in `app.js`) or open `frontend/index.html` directly in a browser.
+
 ## Installation
 
 ### Prerequisites
