@@ -62,7 +62,7 @@ const urlCreate = async (req, res) => {
 const urlRedirect = async (req, res) => {
     const { shortcode } = req.params;
 
-    if (shortcode.length < 6) {
+    if (!shortcode || typeof shortcode !== 'string') {
         throw new BadRequestError('Invalid short URL');
     }
 
