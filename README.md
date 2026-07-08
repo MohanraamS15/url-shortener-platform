@@ -1,309 +1,110 @@
-﻿# URL Shortener API
+# LinkSnip — Smart URL Shortener
 
-A robust and secure REST API for creating, managing, and tracking shortened URLs. Built with Node.js, Express, and MongoDB, featuring JWT authentication, rate limiting, admin controls, and automated cleanup of inactive URLs.
+A modern, full-stack URL shortening platform built with the MERN stack (MongoDB, Express, React, Node.js). 
 
-## Features
+LinkSnip allows users to quickly shorten long URLs, create custom aliases, and track link engagement (clicks and last accessed dates) through a clean, glassmorphic dashboard. It also includes a protected Admin Panel for platform-wide analytics.
 
-- ✅ User registration and login with JWT tokens
-- ✅ Short URL generation with unique 6-character `shortCode`
-- ✅ URL validation for `http://` and `https://`
-- ✅ Access tracking: `accessCount` and `lastAccessedAt`
-- ✅ Public URL lookup by short code
-- ✅ URL statistics endpoint
-- ✅ Admin-only endpoints for listing, updating, and deleting URLs
-- ✅ Daily cleanup of URLs not accessed in 7 days
-- ✅ Security with `helmet`, `cors`, and rate limiting
-- ✅ Centralized error handling with custom error classes
+---
 
-## Tech Stack
+## ✨ Features
 
-- **Runtime**: Node.js
-- **Framework**: Express.js
-- **Database**: MongoDB with Mongoose
-- **Authentication**: JWT
-- **ID Generation**: nanoid
-- **Scheduling**: node-cron
-- **Security**: helmet, express-rate-limit, cors
-- **Validation**: validator
-- **Environment**: dotenv
-- **Dev Tool**: nodemon
+- **User Authentication**: Secure signup and login using JWT.
+- **URL Shortening**: Instantly convert long URLs into tiny, shareable links.
+- **Custom Aliases**: Choose your own custom short code (e.g., `linksnip.com/my-custom-name`).
+- **Click Tracking**: Tracks total clicks and the date/time the link was last visited.
+- **Personal Dashboard**: Users can view, copy, and delete their own created links.
+- **Admin Panel**: Role-based access control. Admins can view platform-wide stats (total URLs, total clicks, active vs inactive), view all registered users, and delete any URL.
+- **Dark/Light Mode**: Fully responsive React UI with built-in theme toggling.
 
-## Project Structure
+---
 
-```
-url-shortener-api/
-├── app.js
-├── package.json
-├── .env
-├── controllers/
-│   ├── authController.js
-│   └── urlController.js
-├── routes/
-│   ├── authRoute.js
-│   └── urlRoute.js
-├── models/
-│   ├── userSchema.js
-│   └── urlSchema.js
-├── middleware/
-│   ├── authenticationMiddleware.js
-│   ├── adminMiddleware.js
-│   ├── errorHandlerMiddleware.js
-│   ├── notFoundMiddleware.js
-│   └── urlMiddleware.js
-├── errors/
-│   ├── BadRequestError.js
-│   ├── NotFound.js
-│   ├── Unauthenticated.js
-│   └── index.js
-├── db/
-│   └── connect.js
-└── cron/
-    └── deleteInactiveURL.js
+## 🛠️ Tech Stack
+
+- **Frontend**: React 18, Vite, React Router v6, Chart.js, Vanilla CSS.
+- **Backend**: Node.js, Express.js.
+- **Database**: MongoDB (Mongoose).
+- **Authentication**: JSON Web Tokens (JWT), bcryptjs.
+
+---
+
+## 📂 Project Architecture
+
+The repository is organized into two distinct directories representing the client and server:
+
+```text
+url-shortener-platform/
+├── backend/                  # Node.js + Express API
+│   ├── controllers/          # Request handlers (auth, url)
+│   ├── cron/                 # Background jobs (e.g., deleting inactive URLs)
+│   ├── db/                   # MongoDB connection setup
+│   ├── errors/               # Custom error classes (NotFound, BadRequest, etc.)
+│   ├── middleware/           # Express middlewares (auth, admin, error handling)
+│   ├── models/               # Mongoose schemas (User, Url)
+│   ├── routes/               # API endpoint definitions
+│   └── app.js                # Main Express server entry point
+│
+└── frontend/                 # React + Vite Client
+    ├── src/
+    │   ├── components/       # Reusable UI components (Sidebar, StatCard, etc.)
+    │   ├── context/          # React Contexts (Theme, Toast notifications)
+    │   ├── pages/            # Main route pages (Dashboard, Login, etc.)
+    │   │   └── admin/        # Admin-specific pages and layouts
+    │   ├── utils/            # Helper functions and API wrappers
+    │   ├── App.jsx           # React Router configuration
+    │   ├── index.css         # Global design tokens and styles
+    │   └── main.jsx          # React DOM entry point
+    └── vite.config.js        # Vite config with backend proxy setup
 ```
 
-## Frontend
+---
 
-A simple static frontend is included in the `frontend/` folder with pages and assets:
+## 🚀 How to Run Locally
 
-```
-frontend/
-├── index.html       # Public landing / shortener UI
-├── register.html    # User registration page
-├── dashboard.html   # Logged-in user's dashboard
-├── script.js        # Frontend JavaScript for auth and shortening
-└── style.css        # Basic styles
-```
+Because this project is separated into a frontend and a backend, you will need to run two separate terminals.
 
-To use the frontend during development, serve the `frontend` folder statically (for example, add `app.use(express.static('frontend'))` in `app.js`) or open `frontend/index.html` directly in a browser.
+### 1. Database Setup
+Ensure you have a MongoDB cluster (like MongoDB Atlas) and have your connection string ready. 
 
-## Installation
-
-### Prerequisites
-
-- Node.js
-- MongoDB (local or Atlas)
-- npm or yarn
-
-### Setup
-
+### 2. Backend Setup
+Open a terminal and navigate to the `backend` folder:
 ```bash
-git clone https://github.com/MohanraamS15/url-shortener-api.git
-cd url-shortener-api
+cd backend
 npm install
 ```
-
-Create a `.env` file:
-
+Create a `.env` file inside the `backend` folder with the following variables:
 ```env
-MONGO_URI=mongodb://username:password@host:port/database
-PORT=5000
-JWT_SECRET=your_secret_key_here
+MONGO_URI=your_mongodb_connection_string
+JWT_SECRET=your_super_secret_jwt_key
+JWT_LIFETIME=30d
 ```
-
-Start the server:
-
+Start the backend server:
 ```bash
 npm start
 ```
+*The API will run on http://localhost:5000*
 
-Server runs on `http://localhost:5000` by default.
-
-## API Endpoints
-
-### Authentication
-
-#### Register
-
-`POST /auth/register`
-
-Body:
-
-```json
-{
-  "name": "John Doe",
-  "email": "john@example.com",
-  "password": "securePassword123"
-}
+### 3. Frontend Setup
+Open a second terminal and navigate to the `frontend` folder:
+```bash
+cd frontend
+npm install
 ```
-
-Response:
-
-```json
-{
-  "name": "John Doe",
-  "email": "john@example.com",
-  "token": "<jwt_token>"
-}
+Start the Vite development server:
+```bash
+npm run dev
 ```
+*The React app will run on http://localhost:3000 (or 3001). Vite is configured to automatically proxy API requests to your local backend.*
 
-#### Login
+---
 
-`POST /auth/login`
+## 🌍 Deployment
 
-Body:
+To deploy this application to production:
+1. **Backend (e.g., Render)**: Deploy the `backend` folder as a Node Web Service. Make sure to add your `.env` variables in the deployment dashboard.
+2. **Frontend (e.g., Vercel)**: Deploy the `frontend` folder. Add an environment variable named `VITE_API_URL` and set it to your live backend URL (e.g., `https://your-api.onrender.com`).
 
-```json
-{
-  "email": "john@example.com",
-  "password": "securePassword123"
-}
-```
+---
 
-Response:
+## 🛡️ License
 
-```json
-{
-  "name": "John Doe",
-  "token": "<jwt_token>"
-}
-```
-
-### URL Management
-
-#### Create Short URL
-
-`POST /shorten`
-
-Headers:
-
-- `Authorization: Bearer <token>`
-
-Body:
-
-```json
-{
-  "url": "https://www.example.com/long/url"
-}
-```
-
-Response (201):
-
-```json
-{
-  "id": "507f1f77bcf86cd799439011",
-  "url": "https://www.example.com/long/url",
-  "shortCode": "a1b2c3",
-  "createdAt": "2026-05-14T10:30:00.000Z",
-  "updatedAt": "2026-05-14T10:30:00.000Z",
-  "accessCount": 0,
-  "lastAccessedAt": "2026-05-14T10:30:00.000Z"
-}
-```
-
-#### Get URL by Short Code
-
-`GET /shorten/:shortcode`
-
-Response:
-
-```json
-{
-  "id": "507f1f77bcf86cd799439011",
-  "url": "https://www.example.com/long/url",
-  "shortCode": "a1b2c3",
-  "createdAt": "2026-05-14T10:30:00.000Z",
-  "updatedAt": "2026-05-14T10:30:00.000Z"
-}
-```
-
-> Each request increments `accessCount` and updates `lastAccessedAt`.
-
-#### Get URL Stats
-
-`GET /shorten/:shortcode/stats`
-
-Response:
-
-```json
-{
-  "id": "507f1f77bcf86cd799439011",
-  "url": "https://www.example.com/long/url",
-  "shortCode": "a1b2c3",
-  "createdAt": "2026-05-14T10:30:00.000Z",
-  "updatedAt": "2026-05-14T15:22:00.000Z",
-  "accessCount": 42,
-  "lastAccessedAt": "2026-05-14T15:22:00.000Z"
-}
-```
-
-#### Get All URLs (Admin Only)
-
-`GET /shorten`
-
-Headers:
-
-- `Authorization: Bearer <token>`
-
-Response:
-
-```json
-{
-  "data": [
-    {
-      "id": "507f1f77bcf86cd799439011",
-      "url": "https://www.example.com/long/url",
-      "shortCode": "a1b2c3",
-      "createdAt": "2026-05-14T10:30:00.000Z",
-      "updatedAt": "2026-05-14T10:30:00.000Z"
-    }
-  ]
-}
-```
-
-#### Update Short URL (Admin Only)
-
-`PUT /shorten/:shortcode`
-
-Headers:
-
-- `Authorization: Bearer <token>`
-
-Body:
-
-```json
-{
-  "url": "https://www.newsite.com/updated/path"
-}
-```
-
-Response:
-
-```json
-{
-  "id": "507f1f77bcf86cd799439011",
-  "url": "https://www.newsite.com/updated/path",
-  "shortCode": "a1b2c3",
-  "createdAt": "2026-05-14T10:30:00.000Z",
-  "updatedAt": "2026-05-14T10:35:00.000Z"
-}
-```
-
-#### Delete Short URL (Admin Only)
-
-`DELETE /shorten/:shortcode`
-
-Headers:
-
-- `Authorization: Bearer <token>`
-
-Response: `204 No Content`
-
-## Access Control
-
-- Public endpoints: `GET /shorten/:shortcode`, `GET /shorten/:shortcode/stats`
-- Authenticated endpoint: `POST /shorten`
-- Admin-only endpoints: `GET /shorten`, `PUT /shorten/:shortcode`, `DELETE /shorten/:shortcode`
-
-## Cron Cleanup
-
-The file `cron/deleteInactiveURL.js` runs every night at midnight and removes URLs with `lastAccessedAt` older than 7 days.
-
-## Validation Rules
-
-- URLs must include `http://` or `https://`
-- User passwords must contain uppercase letters, lowercase letters, digits, and special characters
-- JWT tokens expire after 10 days
-
-## Scripts
-
-- `npm start` — starts the application with `nodemon`
+This project is open-source and available under the MIT License.
