@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, BarElement, Title, Tooltip, Legend } from 'chart.js';
+import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, BarElement, Title, Tooltip, Legend, BarController, LineController } from 'chart.js';
 import { Chart } from 'react-chartjs-2';
 import StatCard from '../../components/StatCard';
 import Spinner from '../../components/Spinner';
@@ -8,7 +8,7 @@ import { useTheme } from '../../context/ThemeContext';
 import { apiAdminStats } from '../../utils/api';
 import { fmtTime, truncate } from '../../utils/auth';
 
-ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, BarElement, Title, Tooltip, Legend);
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, BarElement, Title, Tooltip, Legend, BarController, LineController);
 
 export default function Overview() {
   const { showToast } = useToast();
