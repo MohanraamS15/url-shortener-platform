@@ -19,13 +19,13 @@ const errorHandler=require('./middleware/errorHandlerMiddleware');
 
 app.use(helmet());
 app.use(cors());
-app.use(
-    rateLimiter({
-        windowMs:15*60*1000,
-        max:100,
-        message:'Too many requests from this IP'
-    })
-);
+// app.use(
+//     rateLimiter({
+//         windowMs:15*60*1000,
+//         max:100,
+//         message:'Too many requests from this IP'
+//     })
+// );
 
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
