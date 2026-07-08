@@ -15,6 +15,8 @@ import Overview from './pages/admin/Overview';
 import AllUrls from './pages/admin/AllUrls';
 import Users from './pages/admin/Users';
 
+import RedirectHandler from './components/RedirectHandler';
+
 export default function App() {
   return (
     <ThemeProvider>
@@ -23,6 +25,9 @@ export default function App() {
           <Routes>
             <Route path="/" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            
+            {/* Short URL Redirect Handler */}
+            <Route path="/shorten/:code" element={<RedirectHandler />} />
             
             {/* Protected User Routes */}
             <Route
